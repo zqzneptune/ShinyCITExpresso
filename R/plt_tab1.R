@@ -32,7 +32,6 @@ pltOverviewGrp <- function(tblRaw, gnp, visp = "all", fnCol = "Spectral"){
       geom_point(size = 0.5, alpha = 0.8) +
       labs(title = gnp) +
       getReduDimTheme() +
-      guides(color = guide_colorbar(barwidth = 15)) +
       coord_fixed(ratio = rat) +
       scale_colour_manual(values = colorRampPalette(brewer.pal(8, fnCol))(length(unique(tblRaw[[gnp]])))) +
       geom_text_repel(
@@ -61,7 +60,6 @@ pltOverviewGrp <- function(tblRaw, gnp, visp = "all", fnCol = "Spectral"){
       labs(title = gnp) +
       getReduDimTheme() +
       coord_fixed(ratio = rat) +
-      guides(color = guide_colorbar(barwidth = 15)) +
       geom_point(
         data =
           datTbl,
