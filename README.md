@@ -14,6 +14,10 @@ install.packages(c("shiny", "waiter", "bslib", "bsicons"))
 
 # install Bioconductor packages
 install.packages("BiocManager")
-BiocManager::install(c("SummarizedExperiment", "BiocGenerics", "SingleCellExperiment", "MultiAssayExperiment", "HDF5Array"))
+BiocManager::install(
+  c("SummarizedExperiment", "BiocGenerics",
+    "SingleCellExperiment", "MultiAssayExperiment",
+    "HDF5Array")
+)
 
 ```
