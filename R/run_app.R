@@ -1,29 +1,17 @@
 #' @title Run the ShinyApp
 #' @description Launches a Shiny application using the provided MultiAssayExperiment maeect.
-#' @param mae A MultiAssayExperiment maeect (for documentation purposes only).
+#' @param mae A MultiAssayExperiment object (for documentation purposes only).
 #' @import shiny
 #' @import bslib
 #' @import bsicons
 #' @import waiter
-#' @import MultiAssayExperiment
-#' @import HDF5Array
-#' @import SingleCellExperiment
-
-#' @importFrom BiocGenerics Reduce
 
 #' @export
 #' @examples
 #' \dontrun{
-#' # Load required packages
-#'
-#' library(MultiAssayExperiment)
-#' library(ShinyCITExpresso)
-#' # Load your MultiAssayExperiment maeect (example)
-#' data("example_mae")
-#'
-#' # Run the ShinyApp (not run in documentation)
-#' run_app(mae = example_mae)
+#' run_app(mae = mae)
 #' }
+#'
 run_app <- function(mae) {
   ShinyCITExpresso_ui <-
     fixedPage(
@@ -57,8 +45,6 @@ run_app <- function(mae) {
       page_navbar(
         title = "ShinyCITExpresso",
         header = h1("Demo Data"),
-        # footer = "ShinyCITExpresso",
-        selected = "overview",
 
         ### tab 1 ####
         getUItabl1(),
@@ -76,7 +62,7 @@ run_app <- function(mae) {
       )
 
 
-  )
+    )
 
   # Server Logic ####
   ShinyCITExpresso_server <- function(input, output, session) {
@@ -257,15 +243,8 @@ run_app <- function(mae) {
         avaReducedName
     )
 
-    observeEvent(input$mkFeatureViz, {
-      output$reduFeatureViz <- renderPlot({
-        req(
-          input$layerFeatureViz,
-          input$mkFeatureViz,
-          input$colorReduFeatureViz,
-          input$layoutReduFeatureViz
-        )
-
+    getReduFeatureViz <-
+      eventReactive(input$plotReduFeatureViz, {
         tblRaw <-
           getTblReducedDim(listReducedDim, input$layoutReduFeatureViz)
 
@@ -278,10 +257,16 @@ run_app <- function(mae) {
 
         pltReduFeatureViz(
           tblRaw = tblRaw,
-          geneName = input$mkFeatureViz,
+          geneName =
+            paste(input$layerFeatureViz,
+                  input$mkFeatureViz,
+                  sep = ": "),
           colFn = input$colorReduFeatureViz
         )
       })
+
+    output$reduFeatureViz <- renderPlot({
+      getReduFeatureViz()
     })
 
     # tab 2: by Group ####
@@ -312,15 +297,8 @@ run_app <- function(mae) {
       )
     })
 
-    observeEvent(input$mkFeatureViz, {
-      output$grpFeatureViz <- renderPlot({
-        req(
-          input$layerFeatureViz,
-          input$mkFeatureViz,
-          input$gnpNamesGrpFeatureViz,
-          input$groupByGrpFeatureViz
-        )
-
+    getGrpFeatureViz <-
+      eventReactive(input$plotGrpFeatureViz, {
         tblRaw <-
           data.frame(
             `group` =
@@ -336,6 +314,10 @@ run_app <- function(mae) {
         qBase <-
           pltGrpFeatureViz(
             tblRaw = tblRaw,
+            geneName =
+              paste(input$layerFeatureViz,
+                    input$mkFeatureViz,
+                    sep = "\n"),
             grpName = input$gnpNamesGrpFeatureViz,
             fnCol = "Spectral",
             fnTitle = input$groupByGrpFeatureViz
@@ -346,13 +328,11 @@ run_app <- function(mae) {
         if(input$pltTypeGrpFeatureViz == "violin"){
           plot(qBase + geom_violin())
         }
-
-
-
       })
 
+    output$grpFeatureViz <- renderPlot({
+      getGrpFeatureViz()
     })
-
 
     # tab 3: choose X ####
     updateSelectizeInput(
@@ -418,16 +398,8 @@ run_app <- function(mae) {
       choices =
         grpCol
     )
-
     getScatterDat <-
       reactive({
-        req(
-          input$xLayerCrossModal,
-          input$xMarkerCrossModal,
-          input$yLayerCrossModal,
-          input$yMarkerCrossModal,
-          input$groupByCrossModal
-        )
 
         tblRaw <-
           data.frame(
@@ -454,51 +426,61 @@ run_app <- function(mae) {
         }
       })
 
+    getOverallCrossModalplt <-
+      eventReactive(input$plotCrossModal, {
+        pltOverallCrossModal(
+          tblDat =
+            getScatterDat(),
+          xLab =
+            paste(
+              input$xLayerCrossModal,
+              input$xMarkerCrossModal,
+              sep = "\n"
+            ),
+          yLab =
+            paste(
+              input$yLayerCrossModal,
+              input$yMarkerCrossModal,
+              sep = "\n"
+            ),
+          fnCol = "Spectral",
+          corLm = input$corLmCrossModal
+        )
+      })
+
     output$overallCrossModal <- renderPlot({
-      pltOverallCrossModal(
-        tblDat =
-          getScatterDat(),
-        xLab =
-          paste(
-            input$xLayerCrossModal,
-            input$xMarkerCrossModal,
-            sep = "\n"
-          ),
-        yLab =
-          paste(
-            input$yLayerCrossModal,
-            input$yMarkerCrossModal,
-            sep = "\n"
-          ),
-        fnCol = "Spectral",
-        corLm = input$corLmCrossModal
-      )
-
-
+      getOverallCrossModalplt()
     })
+
+
+    getWrapCrossModalplt <-
+      eventReactive(input$plotCrossModal, {
+        pltWrapCrossModal(
+          tblDat =
+            getScatterDat(),
+          xLab =
+            paste(
+              input$xLayerCrossModal,
+              input$xMarkerCrossModal,
+              sep = "\n"
+            ),
+          yLab =
+            paste(
+              input$yLayerCrossModal,
+              input$yMarkerCrossModal,
+              sep = "\n"
+            ),
+          fnCol = "Spectral",
+          corLm = input$corLmCrossModal
+        )
+      })
+
 
     output$wrapCrossModal <- renderPlot({
-
-      pltWrapCrossModal(
-        tblDat =
-          getScatterDat(),
-        xLab =
-          paste(
-            input$xLayerCrossModal,
-            input$xMarkerCrossModal,
-            sep = "\n"
-          ),
-        yLab =
-          paste(
-            input$yLayerCrossModal,
-            input$yMarkerCrossModal,
-            sep = "\n"
-          ),
-        fnCol = "Spectral",
-        corLm = input$corLmCrossModal
-      )
-
+      getWrapCrossModalplt()
     })
+
+
 
     # tab 4: Reduced Dimensions ####
 
@@ -534,12 +516,12 @@ run_app <- function(mae) {
 
       tblRaw[[gnp]] <-
         listColData[[gnp]]
+
       if(gnp %in% grpCol){
         pltOverviewGrp(tblRaw, gnp, visp = "all")
       }else if(gnp %in% charCol){
         pltOverviewChar(tblRaw, gnp)
       }
-
 
     })
 
@@ -656,9 +638,9 @@ run_app <- function(mae) {
           markerDat[rownames(markerDat) %in% rownames(tblBrush), ]
       })
 
-    output$reduGatePseudoSort <-
-      renderPlot({
 
+    getReduGatePseudoSort <-
+      eventReactive(input$gateReduPseudoSortBrush, {
         pltReduGatePseudoSort(
           tblDat =
             getBrushScatterDat(),
@@ -679,10 +661,12 @@ run_app <- function(mae) {
               sep = "\n"
             )
         )
-
       })
 
 
+    output$reduGatePseudoSort <- renderPlot({
+      getReduGatePseudoSort()
+    })
 
 
   }

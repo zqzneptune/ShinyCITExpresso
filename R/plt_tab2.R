@@ -36,7 +36,7 @@ pltReduFeatureViz <- function(tblRaw, geneName, colFn){
 }
 
 
-pltGrpFeatureViz <- function(tblRaw, grpName, fnCol, fnTitle){
+pltGrpFeatureViz <- function(tblRaw, geneName, grpName, fnCol, fnTitle){
   datExp <-
     tblRaw[tblRaw[["group"]] %in% grpName, ]
 
@@ -51,7 +51,7 @@ pltGrpFeatureViz <- function(tblRaw, grpName, fnCol, fnTitle){
       labs(
         title = fnTitle,
         x = "",
-        y = "Normalized Expression Level"
+        y = geneName
       ) +
       scale_fill_manual(values =
                           rep(colorRampPalette(brewer.pal(8, fnCol))(length(unique(datExp[["group"]]))), 3)) +

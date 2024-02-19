@@ -58,27 +58,38 @@ getUItabl3 <- function(){
               )
             )
           )
+        ),
+        column(
+          width = 4,
+          selectInput(
+            "groupByCrossModal",
+            choices = "",
+            label = "by Group (e.g. clusters, batches, cell-types)"
+          )
+        ),
+        column(
+          width = 4,
+          checkboxInput(
+            "corLmCrossModal",
+            label = "Add trend line",
+            value = FALSE,
+            width = NULL),
+
+          checkboxInput(
+            "revZeCrossModal",
+            label = "Remove zeros",
+            value = FALSE,
+            width = NULL)
+        ),
+        column(
+          width = 4,
+          actionButton("plotCrossModal", "Plot")
         )
       ),
 
       card(
         card_header(
-          "Cross modality feature correlation",
-          popover(
-            title = "Settings",
-            bs_icon("gear"),
-            checkboxInput(
-              "corLmCrossModal",
-              label = "Add trend line?",
-              value = FALSE,
-              width = NULL),
-
-            checkboxInput(
-              "revZeCrossModal",
-              label = "Remove zeros?",
-              value = FALSE,
-              width = NULL)
-          )
+          "Cross modality feature correlation"
         ),
         card_body(
           fluidRow(
@@ -89,11 +100,6 @@ getUItabl3 <- function(){
 
             column(
               width = 8,
-              selectInput(
-                "groupByCrossModal",
-                choices = "",
-                label = "by Group (e.g. clusters, batches, cell-types)"
-              ),
               plotOutput("wrapCrossModal", height = "660px")
             )
           )

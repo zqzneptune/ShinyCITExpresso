@@ -7,21 +7,14 @@
 run_app(mae)
 }
 \arguments{
-\item{mae}{A MultiAssayExperiment maeect (for documentation purposes only).}
+\item{mae}{A MultiAssayExperiment object (for documentation purposes only).}
 }
 \description{
 Launches a Shiny application using the provided MultiAssayExperiment maeect.
 }
 \examples{
 \dontrun{
-# Load required packages
-
-library(MultiAssayExperiment)
-library(ShinyCITExpresso)
-# Load your MultiAssayExperiment maeect (example)
-data("example_mae")
-
-# Run the ShinyApp (not run in documentation)
-run_app(mae = example_mae)
+run_app(mae = mae)
 }
+
 }

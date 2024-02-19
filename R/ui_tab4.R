@@ -19,7 +19,7 @@ getUItabl4 <- function(){
 
         card(
           card_header(
-            "Reduced Dimensions (click & drag)",
+            "Reduced Dimensions",
             popover(
               title = "Settings",
               bs_icon("gear"),
@@ -47,7 +47,7 @@ getUItabl4 <- function(){
 
         card(
           card_header(
-            "Gating Features"
+            "Gating Features (click and drag the ReduDim plot after gate selections)"
           ),
           card_body(
             fluidRow(

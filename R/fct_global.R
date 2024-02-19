@@ -1,22 +1,36 @@
 # Return ggplot2 themes applied globally
 #' @import ggplot2
 #'
-getReduDimTheme <- function(){
-  return(theme_classic() +
-           theme(
-             text = element_text(size = 18, family = "Helvetica"),
-             panel.background = element_rect(fill = "white", colour = NA),
-             axis.line = element_line(colour = "black"),
-             axis.ticks = element_line(colour = "black"),
-             axis.text = element_text(size = 18),
-             plot.title = element_text(hjust = 0, face = "bold"),
-             legend.position = "bottom",
-             legend.title =
-               element_blank(),
-             legend.key = element_rect(colour = NA, fill = NA),
-             axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-             axis.text.y = element_blank(), axis.ticks.y = element_blank()
-           ))
+getReduDimTheme <- function(pltType = "grp"){
+  themeBase <-
+    theme_classic() +
+    theme(
+      text = element_text(size = 18, family = "Helvetica"),
+      panel.background = element_rect(fill = "white", colour = NA),
+      axis.line = element_line(colour = "black"),
+      axis.ticks = element_line(colour = "black"),
+      axis.text = element_text(size = 18),
+      plot.title = element_text(hjust = 0, face = "bold"),
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank()
+    )
+  if(pltType == "grp"){
+    themeBase <-
+      themeBase +
+      theme(legend.position = "none")
+  }else if(pltType == "char"){
+    themeBase <-
+      themeBase +
+      theme(legend.position = "bottom",
+            legend.title =
+              element_blank(),
+            legend.key =
+              element_rect(colour = NA, fill = NA))
+  }
+
+  return(themeBase)
 }
 
 getGrpTheme <- function(){
@@ -37,31 +51,30 @@ getGrpTheme <- function(){
 }
 
 # Return global color scheme
-
+#' @importFrom grDevices colorRampPalette
 getColorScheme <- function(){
   colorPalette <-
-    lapply(list(c("#00007F", "blue", "#007FFF", "cyan",
-                "#7FFF7F", "yellow", "#FF7F00", "red",
-                "#7F0000"),
-              c("grey85", "#FFF7EC", "#FEE8C8", "#FDD49E", "#FDBB84",
-                "#FC8D59", "#EF6548", "#D7301F", "#B30000", "#7F0000"
-              ),
-              c("#4575B4", "#74ADD1", "#ABD9E9", "#E0F3F8", "#FFFFBF",
-                "#FEE090", "#FDAE61", "#F46D43", "#D73027"
-              ),
-              c(
-                "#FDE725", "#AADC32", "#5DC863", "#27AD81", "#21908C",
-                "#2C728E", "#3B528B", "#472D7B", "#440154"
-              )), function(x){
-                return(colorRampPalette(x)(20))
-              })
+    lapply(
+      list(c("#00007F", "blue", "#007FFF", "cyan",
+             "#7FFF7F", "yellow", "#FF7F00", "red",
+             "#7F0000"),
+           c("grey85", "#FFF7EC", "#FEE8C8", "#FDD49E", "#FDBB84",
+             "#FC8D59", "#EF6548", "#D7301F", "#B30000", "#7F0000"),
+           c("#4575B4", "#74ADD1", "#ABD9E9", "#E0F3F8", "#FFFFBF",
+             "#FEE090", "#FDAE61", "#F46D43", "#D73027"),
+           c("#FDE725", "#AADC32", "#5DC863", "#27AD81", "#21908C",
+             "#2C728E", "#3B528B", "#472D7B", "#440154")),
+      function(x){return(colorRampPalette(x)(20))})
+
   names(colorPalette) <-
-    c("Jet", "White-Red", "Blue-Yellow-Red", "Yellow-Green-Purple")
+    c("Jet", "Grey-Red", "Blue-Yellow-Red", "Yellow-Green-Purple")
   return(colorPalette)
 }
 
 #' @import MultiAssayExperiment
-#' @import SingleCellExperiment
+#' @importFrom SingleCellExperiment colData
+#' @importFrom SingleCellExperiment reducedDims
+#' @importFrom SummarizedExperiment assay
 #' @importFrom BiocGenerics Reduce
 
 getListColData <- function(mae){
@@ -75,7 +88,6 @@ getListColData <- function(mae){
     listColData[!duplicated(names(listColData))]
   return(listColData)
 }
-
 
 
 getNameColData <- function(listColData){
@@ -118,7 +130,7 @@ getPrfReducedName <- function(avaReducedName){
   return(prfReducedName)
 }
 
-#' @importFrom SummarizedExperiment assay
+
 getListAssayMarkers <- function(mae){
   listAssayMarkers <-
     lapply(experiments(mae), function(sce){

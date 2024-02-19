@@ -8,7 +8,6 @@
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette
 #' @importFrom dplyr filter
-
 pltOverviewGrp <- function(tblRaw, gnp, visp = "all", fnCol = "Spectral"){
   x_var <-
     colnames(tblRaw)[1]
@@ -31,7 +30,7 @@ pltOverviewGrp <- function(tblRaw, gnp, visp = "all", fnCol = "Spectral"){
                color = .data[[gnp]])) +
       geom_point(size = 0.5, alpha = 0.8) +
       labs(title = gnp) +
-      getReduDimTheme() +
+      getReduDimTheme(pltType = "grp") +
       coord_fixed(ratio = rat) +
       scale_colour_manual(values = colorRampPalette(brewer.pal(8, fnCol))(length(unique(tblRaw[[gnp]])))) +
       geom_text_repel(
@@ -45,7 +44,7 @@ pltOverviewGrp <- function(tblRaw, gnp, visp = "all", fnCol = "Spectral"){
   }else{
     datTbl <-
       tblRaw %>%
-        filter(.data[[gnp]] == visp)
+      filter(.data[[gnp]] == visp)
 
     datCell <-
       datTbl %>%
@@ -92,14 +91,14 @@ pltOverviewChar <- function(tblRaw, scoreName){
 
   datTbl <-
     tblRaw %>%
-      filter(!is.na(.data[[scoreName]]))
+    filter(!is.na(.data[[scoreName]]))
 
   ggplot(data = tblRaw,
          aes(x = .data[[x_var]],
              y = .data[[y_var]])) +
     labs(title = scoreName) +
     geom_point(size = 0.5, alpha = 0.3, color = "#EEEEEE") +
-    getReduDimTheme() +
+    getReduDimTheme(pltType = "char") +
     coord_fixed(ratio = rat) +
     guides(color = guide_colorbar(barwidth = 15)) +
     geom_point(

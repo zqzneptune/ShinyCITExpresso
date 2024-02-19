@@ -14,7 +14,7 @@ getUItabl1 <- function(){
         col_widths = breakpoints(
           sm = c(12, 12),
           md = c(12, 12),
-          lg = c(5, 7)
+          lg = c(6, 6)
         ),
 
         card(

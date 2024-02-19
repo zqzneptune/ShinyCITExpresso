@@ -12,86 +12,69 @@ getUItabl2 <- function(){
       title = "FeatureViz",
       value = "featureviz",
 
-      layout_columns(
-        col_widths = breakpoints(
-          sm = c(12, 12),
-          md = c(12, 12),
-          lg = c(3, 9)
-        ),
-
-
-        card(
-          card_header(
-            "Choose feature:"
-          ),
-          card_body(
-            selectizeInput(
-              "layerFeatureViz",
-              choices = NULL,
-              label = "Select modality"
-            ),
-            selectizeInput(
-              "mkFeatureViz",
-              choices = NULL,
-              label = "Select, or type feature name (e.g. TP53)"
-            )
+      fluidRow(
+        column(
+          width = 4,
+          selectizeInput(
+            "layerFeatureViz",
+            choices = NULL,
+            label = "Select modality"
           )
         ),
 
-        card(
-          height = "750px",
-          card_header(
-            "by Reduced Dimensions",
-            popover(
-              title = "Settings",
-              bs_icon("gear"),
+        column(
+          width = 8,
+          selectizeInput(
+            "mkFeatureViz",
+            choices = NULL,
+            label = "Select, or type feature name (e.g. TP53)"
+          )
+        )
+      ),
+
+      card(
+        card_header(
+          "by Reduced Dimensions"
+        ),
+
+        card_body(
+          fluidRow(
+            column(
+              width = 9,
+              plotOutput(
+                "reduFeatureViz",
+                height = "750px"
+              ),
+            ),
+            column(
+              width = 3,
+              selectInput(
+                inputId = "layoutReduFeatureViz",
+                choices = NULL,
+                label = "Layout"
+              ),
+              hr(),
               selectizeInput(
                 "colorReduFeatureViz",
                 choices =
                   NULL,
                 label = "Color Palette"
               ),
-
-              hr(),
-              selectInput(
-                inputId = "layoutReduFeatureViz",
-                choices = NULL,
-                label = "Layout"
-              ),
+              actionButton("plotReduFeatureViz", "Plot Redu")
             )
-          ),
-          card_body(
-            plotOutput("reduFeatureViz")
-          ),
-          full_screen = TRUE
-        )
-
+          )
+        ),
+        full_screen = TRUE
       ),
 
       card(
-        height = "750px",
         card_header(
-          "by Groups (e.g. clusters, batches, cell-types)",
-          popover(
-            title = "Settings",
-            bs_icon("gear"),
-            p("Plot type:"),
-            radioButtons(
-              inputId = "pltTypeGrpFeatureViz",
-              label = "",
-              choices =
-                c(
-                  "Box plot" = "box",
-                  "Violin plot" = "violin"
-                ),
-              selected = "box"
-            )
-          )
+          "by Groups (e.g. clusters, batches, cell-types)"
         ),
         card_body(
           fluidRow(
             column(
-              width = 4,
+              width = 3,
               selectInput(
                 "groupByGrpFeatureViz",
                 choices = NULL,
@@ -99,16 +82,37 @@ getUItabl2 <- function(){
               )
             ),
             column(
-              width = 8,
+              width = 4,
               selectInput(
                 inputId = "gnpNamesGrpFeatureViz",
                 label = "Select/deselect to reorder",
                 choices = NULL,
                 multiple = TRUE
               )
+            ),
+            column(
+              width = 3,
+              radioButtons(
+                inputId = "pltTypeGrpFeatureViz",
+                label = "Plot type:",
+                choices =
+                  c(
+                    "Box plot" = "box",
+                    "Violin plot" = "violin"
+                  ),
+                selected = "box"
+              )
+            ),
+            column(
+              width = 2,
+              actionButton("plotGrpFeatureViz", "Plot Group")
             )
           ),
-          plotOutput("grpFeatureViz")
+          hr(),
+          plotOutput(
+            "grpFeatureViz",
+            height = "550px"
+          )
         ),
         full_screen = TRUE
       )
