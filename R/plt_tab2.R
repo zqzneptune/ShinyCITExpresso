@@ -30,7 +30,7 @@ pltReduFeatureViz <- function(tblRaw, geneName, colFn){
       colors = colorPalette[[colFn]],
       na.value = "#EEEEEE"
     ) +
-    getReduDimTheme() +
+    getReduDimTheme(pltType = "char") +
     guides(color = guide_colorbar(barwidth = 15)) +
     coord_fixed(ratio = rat)
 }
