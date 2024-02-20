@@ -77,6 +77,51 @@ getColorScheme <- function(){
 #' @importFrom SummarizedExperiment assay
 #' @importFrom BiocGenerics Reduce
 
+getMAEmsg <- function(mae){
+  if(!is.null(mae)){
+    if ("MultiAssayExperiment" %in% class(mae)) {
+      listExp <-
+        mae@ExperimentList
+
+      listSCE <-
+        listExp[unlist(lapply(listExp, function(exp){
+          return("SingleCellExperiment" %in% class(exp))
+        }))]
+
+      numSCE <-
+        length(listSCE)
+
+      if(numSCE > 0){
+        numCells <-
+          unique(unlist(lapply(listSCE, ncol)))
+        if(length(numCells) == 1){
+          numVars <-
+            unlist(lapply(listSCE, nrow))
+
+          msgSummary <-
+            paste0(
+              sum(numVars), " variables found across ", numSCE, " modalities ",
+              "(", paste(
+                paste0(names(numVars), ": ", numVars), collapse = ", "),
+              ")"
+            )
+          return(msgSummary)
+        }else{
+          stop("Cell counts vary among SingleCellExperiment objects.")
+        }
+      }else{
+        stop("No SingleCellExperiment object found.")
+      }
+    } else {
+      stop("The object is not a MultiAssayExperiment.")
+    }
+  }else{
+    stop("No MAE found.")
+  }
+}
+
+
+
 getListColData <- function(mae){
   listColData <-
     Reduce(append, lapply(experiments(mae), function(sce){

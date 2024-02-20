@@ -1,6 +1,9 @@
-#' @title Run the ShinyApp
-#' @description Launches a Shiny application using the provided MultiAssayExperiment maeect.
-#' @param mae A MultiAssayExperiment object (for documentation purposes only).
+#' @title Run the ShinyCITExpresso
+#' @description Launches a Shiny application using the provided
+#' MultiAssayExperiment object.
+#' @param mae A MultiAssayExperiment object with experimentlist of
+#' SingleCellExperiment objects.
+#' @param appTitle A character vector to show on as the title of the app.
 #' @import shiny
 #' @import bslib
 #' @import bsicons
@@ -12,7 +15,10 @@
 #' run_app(mae = mae)
 #' }
 #'
-run_app <- function(mae) {
+run_app <- function(mae, appTitle = "Demo Data") {
+  msgMAE <-
+    getMAEmsg(mae)
+
   ShinyCITExpresso_ui <-
     fixedPage(
       ## UI settings ####
@@ -44,7 +50,7 @@ run_app <- function(mae) {
 
       page_navbar(
         title = "ShinyCITExpresso",
-        header = h1("Demo Data"),
+        header = div(h1(appTitle), p(msgMAE)),
 
         ### tab 1 ####
         getUItabl1(),

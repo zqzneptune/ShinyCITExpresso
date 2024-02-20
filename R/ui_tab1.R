@@ -46,7 +46,7 @@ getUItabl1 <- function(){
             plotOutput("overviewGrp")
           ),
           full_screen = TRUE,
-          height = "660px"
+          height = "560px"
         ),
 
         card(
@@ -72,8 +72,7 @@ getUItabl1 <- function(){
           card_body(
             plotOutput("overviewChar")
           ),
-          full_screen = TRUE,
-          height = "660px"
+          full_screen = TRUE
         )
       )
     )

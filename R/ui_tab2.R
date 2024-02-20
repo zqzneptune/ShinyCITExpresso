@@ -43,7 +43,7 @@ getUItabl2 <- function(){
               width = 9,
               plotOutput(
                 "reduFeatureViz",
-                height = "750px"
+                height = "560px"
               ),
             ),
             column(
@@ -111,7 +111,7 @@ getUItabl2 <- function(){
           hr(),
           plotOutput(
             "grpFeatureViz",
-            height = "550px"
+            height = "560px"
           )
         ),
         full_screen = TRUE
