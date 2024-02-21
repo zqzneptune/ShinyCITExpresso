@@ -63,8 +63,7 @@ getUItabl2 <- function(){
               actionButton("plotReduFeatureViz", "Plot Redu")
             )
           )
-        ),
-        full_screen = TRUE
+        )
       ),
 
       card(
@@ -113,8 +112,7 @@ getUItabl2 <- function(){
             "grpFeatureViz",
             height = "560px"
           )
-        ),
-        full_screen = TRUE
+        )
       )
 
     )
