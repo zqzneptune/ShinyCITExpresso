@@ -1,6 +1,6 @@
 Package: ShinyCITExpresso
 Title: A ShinyApp for visualization and explorering Cellular Indexing of Transcriptomes and Epitopes by Sequencing (CITE-seq) data
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Authors@R: 
     person('Qingzhou', 'Zhang', email = 'zqzneptune@hotmail.com', role = c('cre', 'aut'), comment = c(ORCID = '0000-0001-9540-2624'))
 Description: ShinyCITExpresso is an RShiny app takes TotalVI/Seurat/SingleCelExperiment object as input and allows users to explorer CITE-Seq data via visualizing features (RNA/ADT) in dimensional reduction space (e.g. UMAP, tSNE, PCA), performing in-silico gating and cross modality co-expression analysis.

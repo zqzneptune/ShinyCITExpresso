@@ -29,7 +29,7 @@ getReduDimTheme <- function(pltType = "grp"){
             legend.key =
               element_rect(colour = NA, fill = NA))
   }
-
+  
   return(themeBase)
 }
 
@@ -47,7 +47,7 @@ getGrpTheme <- function(){
         axis.ticks.x = element_blank(),
         axis.ticks.y = element_blank())
   )
-
+  
 }
 
 # Return global color scheme
@@ -65,7 +65,7 @@ getColorScheme <- function(){
            c("#FDE725", "#AADC32", "#5DC863", "#27AD81", "#21908C",
              "#2C728E", "#3B528B", "#472D7B", "#440154")),
       function(x){return(colorRampPalette(x)(20))})
-
+  
   names(colorPalette) <-
     c("Jet", "Grey-Red", "Blue-Yellow-Red", "Yellow-Green-Purple")
   return(colorPalette)
@@ -82,22 +82,22 @@ getMAEmsg <- function(mae){
     if ("MultiAssayExperiment" %in% class(mae)) {
       listExp <-
         mae@ExperimentList
-
+      
       listSCE <-
         listExp[unlist(lapply(listExp, function(exp){
           return("SingleCellExperiment" %in% class(exp))
         }))]
-
+      
       numSCE <-
         length(listSCE)
-
+      
       if(numSCE > 0){
         numCells <-
           unique(unlist(lapply(listSCE, ncol)))
         if(length(numCells) == 1){
           numVars <-
             unlist(lapply(listSCE, nrow))
-
+          
           msgSummary <-
             paste0(
               sum(numVars), " variables found across ", numSCE, " modalities ",
@@ -140,13 +140,13 @@ getNameColData <- function(listColData){
     list()
   clsColData <-
     unlist(lapply(listColData, class))
-
+  
   listNames[["Group"]] <-
     names(clsColData)[clsColData %in% c("factor", "character")]
-
+  
   listNames[["Charac"]] <-
     names(clsColData)[clsColData %in% c("integer", "numeric")]
-
+  
   listNames[["Traj"]] <-
     names(clsColData)[grepl("pseudotime", names(clsColData))]
   return(listNames)
@@ -158,7 +158,7 @@ getListReducedDim <- function(mae){
     Reduce(append, lapply(experiments(mae), function(sce){
       return(reducedDims(sce))
     }))
-
+  
   listReducedDim <-
     listReducedDim[!duplicated(names(listReducedDim))]
   return(listReducedDim)
@@ -167,12 +167,12 @@ getListReducedDim <- function(mae){
 getPrfReducedName <- function(avaReducedName){
   prfReducedName <-
     avaReducedName[grepl("(umap|pca|tsne|t-sne|fa|fr)", avaReducedName, ignore.case = TRUE)]
-
-  if(prfReducedName == ""){
+  
+  if(length(prfReducedName) == 0){
     prfReducedName <-
       avaReducedName[1]
   }
-  return(prfReducedName)
+  return(prfReducedName[1])
 }
 
 
@@ -181,7 +181,7 @@ getListAssayMarkers <- function(mae){
     lapply(experiments(mae), function(sce){
       return(rownames(SummarizedExperiment::assay(sce)))
     })
-
+  
 }
 
 getFeatureExpression <- function(mae, layer, feature){
