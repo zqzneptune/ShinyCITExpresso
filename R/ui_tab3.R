@@ -9,6 +9,7 @@ getUItabl3 <- function(){
     nav_panel(
       title = "CrossModal",
       value = "crossmodal",
+      icon = icon("layer-group"),
       fluidRow(
         column(
           width = 6,

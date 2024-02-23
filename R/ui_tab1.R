@@ -9,6 +9,7 @@ getUItabl1 <- function(){
     nav_panel(
       title = "Overview",
       value = "overview",
+      icon = icon("dice-d20"),
 
       layout_columns(
         col_widths = breakpoints(

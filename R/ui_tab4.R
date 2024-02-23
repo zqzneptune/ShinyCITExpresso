@@ -9,6 +9,7 @@ getUItabl4 <- function(){
     nav_panel(
       title = "PseudoSort",
       value = "pseudosort",
+      icon = icon("crutch"),
 
       layout_columns(
         col_widths = breakpoints(

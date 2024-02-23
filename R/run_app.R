@@ -64,7 +64,22 @@ run_app <- function(mae, appTitle = "Demo Data") {
         ### tab 4 ####
         getUItabl4(),
 
+        nav_spacer(),
 
+        nav_item(
+          tags$a(
+            shiny::icon("github"),
+            href = "https://github.com/zqzneptune/ShinyCITExpresso",
+            target = "_blank"
+          )
+        ),
+        nav_item(
+          tags$a(
+            shiny::icon("house"),
+            href = "https://www.citexpresso.net/shinydemo",
+            target = "_blank"
+          )
+        )
       )
 
 

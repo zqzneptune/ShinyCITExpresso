@@ -11,6 +11,7 @@ getUItabl2 <- function(){
     nav_panel(
       title = "FeatureViz",
       value = "featureviz",
+      icon = icon("cubes-stacked"),
 
       fluidRow(
         column(
