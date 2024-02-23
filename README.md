@@ -1,6 +1,8 @@
 
 # ShinyCITExpresso
 
+![](img/ShinyCITExpresso_title_QZ_main)
+
 The `ShinyCITExpresso` R package provides a web application based on
 [Shiny](https://shiny.posit.co/) and
 [bslib](https://github.com/rstudio/bslib/) for visualization CITE-seq
