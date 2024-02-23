@@ -67,7 +67,7 @@ getColorScheme <- function(){
       function(x){return(colorRampPalette(x)(20))})
   
   names(colorPalette) <-
-    c("Jet", "Grey-Red", "Blue-Yellow-Red", "Yellow-Green-Purple")
+    c("Jet", "Emberstone", "Sunset", "Verdant")
   return(colorPalette)
 }
 
