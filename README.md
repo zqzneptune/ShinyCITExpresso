@@ -1,7 +1,7 @@
 
 # ShinyCITExpresso
 
-![](img/ShinyCITExpresso_title_QZ_main)
+![](img/ShinyCITExpresso_title_QZ_main.png)
 
 The `ShinyCITExpresso` R package provides a web application based on
 [Shiny](https://shiny.posit.co/) and
