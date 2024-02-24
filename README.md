@@ -139,7 +139,8 @@ Conduct](https://github.com/zqzneptune/ShinyCITExpresso/blob/main/code_of_conduc
 By contributing to this project, you agree to abide by its terms.
 
 ## FAQ
-- *Q. There are multiple layers of feature data in `cite.h5mu`, why only one layer can be visualized? Can I visualize other layers of data, e.g. `denoised RNA`, or `denoised protein`?*
+
+- *Q. There are multiple layers of feature data in `cite.h5mu`. However, only one layer can be visualized. Is it possible to visualize other layers of data, such as `denoised RNA` or `denoised protein`?*
 
 To simplify matters, `ShinyCITExpresso` opts to display the first available layer in the object. For `AnnData`, the `X` layer is commonly used. To visualize other layers, one can manipulate the `MAE` object by retaining either the `denoised RNA` or `denoised protein` in the assay slot:
   
