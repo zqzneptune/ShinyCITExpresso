@@ -137,3 +137,32 @@ Please note that the `ShinyCITExpresso` project is released with a
 [Contributor Code of
 Conduct](https://github.com/zqzneptune/ShinyCITExpresso/blob/main/code_of_conduct.md).
 By contributing to this project, you agree to abide by its terms.
+
+## FAQ
+- *Q. There are multiple layers of feature data in `cite.h5mu`, why only one layer can be visualized? Can I visualize other layers of data, e.g. `denoised RNA`, or `denoised protein`?*
+
+To simplify matters, `ShinyCITExpresso` opts to display the first available layer in the object. For `AnnData`, the `X` layer is commonly used. To visualize other layers, one can manipulate the `MAE` object by retaining either the `denoised RNA` or `denoised protein` in the assay slot:
+  
+```r
+library(SingleCellExperiment)
+maeObj <-
+  MuData::readH5MU("cite.h5mu")
+
+# A MultiAssayExperiment object of 3 listed
+#  experiments with user-defined names and respective classes.
+#  Containing an ExperimentList class object of length 3:
+#  [1] protein: SingleCellExperiment with xxxx rows and xxxx columns
+#  [2] rna: SingleCellExperiment with xxxx rows and xxxx columns
+#  [3] rna_subset: SingleCellExperiment with xxxx rows and xxx columns
+
+# Choosing denoised_protein for the first Experiment: protein
+assays(maeObj[[1]]) <-
+  assays(maeObj[[1]])[["denoised_protein"]]
+  
+# Choosing denoised_protein for the third Experiment: rna_subset
+assays(maeObj[[3]]) <-
+  assays(maeObj[[3]])[["denoised_rna"]]
+
+# Then Run ShinyCITExpresso
+ShinyCITExpresso::run_app(mae = maeObj)
+```
