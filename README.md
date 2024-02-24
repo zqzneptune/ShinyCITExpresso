@@ -18,9 +18,9 @@ multiomics data:
 
 - Designed to integrate results from diverse CITE-seq analysis pipelines, including:
 
-  - Bioconductor
-  - Seurat
-  - MuData
+  - [Bioconductor](#singlecellexpeiment)
+  - [Seurat](#seurat)
+  - [MuData](#mudata)
 
 ## Navigating Cellular Data: A Visual Journey
 
@@ -75,9 +75,61 @@ Access live demo [here](https://www.citexpresso.net/shinydemo/), and explore res
 
 Select object type to get started with your own data:
 
-- [SingleCellExpeiment](https://www.citexpresso.net/shinydemo/)
-- [Seurat](https://www.citexpresso.net/shinydemo/)
-- [MuData](https://www.citexpresso.net/shinydemo/)
+### MuData
+
+Results from [CITE-seq analysis with totalVI](https://docs.scvi-tools.org/en/stable/tutorials/notebooks/multimodal/totalVI.html) and [Processing and integrating 5k PBMCs CITE-seq data using moun](https://muon-tutorials.readthedocs.io/en/latest/cite-seq/1-CITE-seq-PBMC-5k.html) are `*.h5mu` format, which can be converted into [MultiAssayExperiment](https://waldronlab.io/MultiAssayExperiment/index.html) objects for `ShinyCITExpersso` using the R package [MuData](https://github.com/ilia-kats/MuData/)
+
+```r
+maeObj <- MuData::readH5MU("cite.h5mu")
+ShinyCITExpresso::run_app(mae = maeObj)
+```
+
+### Seurat
+
+Results from [Seurat Weighted Nearest Neighbor Analysis](https://satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis) can be converted into [SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) object first:
+
+```r
+library(Seurat)
+
+seuObj <- readRDS("cite.RDS")
+
+sceObj <- as.SingleCellExperiment(seuObj)
+```
+
+### SingleCellExpeiment
+
+[SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) object stores additional modality in `altExp` slot, which can be extract to construct [MultiAssayExperiment](https://waldronlab.io/MultiAssayExperiment/index.html) object:
+
+```r
+library(SingleCellExperiment)
+
+fnMain <-
+  mainExpName(sceObj)
+fnAlt <-
+  altExpNames(sceObj)  
+
+altSCE <-
+  altExp(sceObj)
+  
+altExp(sceObj) <-
+  NULL
+
+assay_list <-
+  list(sceObj, altSCE)
+  
+names(assay_list) <-
+  c(fnMain, fnAlt)
+  
+datColData <-
+  colData(sceObj)
+
+maeObj <- 
+  MultiAssayExperiment::MultiAssayExperiment(
+    experiments = ExperimentList(assay_list),
+    colData = datColData
+  )
+ShinyCITExpresso::run_app(mae = maeObj)
+```
 
 ## Code of Conduct
 
