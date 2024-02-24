@@ -8,21 +8,36 @@ The `ShinyCITExpresso` R package provides a web application based on
 [bslib](https://github.com/rstudio/bslib/) for visualization CITE-seq
 multiomics data:
 
-- Accepts
+- Supports
   [MultiAssayExperiment](https://waldronlab.io/MultiAssayExperiment/index.html)
-  objects.
+  objects
 
 - Runs on [Rstudio Desktop](https://posit.co/download/rstudio-desktop/),
-  or online platforms supports [Shiny
+  or online platforms supporting [Shiny
   Server](https://posit.co/products/open-source/shinyserver/)
 
-- Works with results from various CITE-seq analysis framework including:
+- Designed to integrate results from diverse CITE-seq analysis pipelines, including:
 
   - Bioconductor
   - Seurat
   - MuData
 
-- An Intuitive Design with Novel Functions
+## Navigating Cellular Data: A Visual Journey
+
+![](img/Action_Overview.gif)
+
+## Tailored Insights: Visualizing Custom Features
+
+![](img/Action_Featureviz.gif)
+
+## Harmonizing Signals: Understanding Cross-Modality Correlation
+
+![](img/Action_Crossmoda.gif)
+
+## Virtual Flow Cytometry: Decoding Pseudo FACS
+
+![](img/Action_PseudoSort_1.gif)
+
 
 ## Installation
 
