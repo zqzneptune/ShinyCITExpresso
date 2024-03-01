@@ -110,3 +110,21 @@ pltOverviewChar <- function(tblRaw, scoreName){
       size = 0.1) +
     scale_color_gradientn(colours = colorPalette[["Jet"]])
 }
+
+pltCharGrpOverview <- function(tblRaw, grpName, charName, fnCol){
+  datExp <-
+    tblRaw
+  p <-
+    ggplot(data = datExp,
+           aes(x = .data[["group"]],
+               y = .data[["chara"]],
+               fill = .data[["group"]])) +
+    labs(
+      x = grpName,
+      y = charName
+    ) +
+    scale_fill_manual(values =
+                        rep(colorRampPalette(brewer.pal(8, fnCol))(length(unique(datExp[["group"]]))), 3)) +
+    getGrpTheme()
+  return(p)
+}

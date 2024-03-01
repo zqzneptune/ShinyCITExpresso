@@ -75,6 +75,50 @@ getUItabl1 <- function(){
           ),
           full_screen = TRUE
         )
+      ),
+
+      card(
+        card_header(
+          "Characteristics vs Groups"
+        ),
+        card_body(
+          fluidRow(
+            column(
+              width = 5,
+              selectInput(
+                "groupCharGrpOverview",
+                choices = NULL,
+                label = "X: Group Name"
+              )
+            ),
+            column(
+              width = 5,
+              selectizeInput(
+                "scoreCharGrpOverview",
+                choices = NULL,
+                label = "Y: Characteristics"
+              )
+            ),
+            column(
+              width = 2,
+              radioButtons(
+                inputId = "pltTypeCharGrpOverview",
+                label = "Plot type:",
+                choices =
+                  c(
+                    "Box plot" = "box",
+                    "Violin plot" = "violin"
+                  ),
+                selected = "box"
+              )
+            )
+          ),
+          hr(),
+          plotOutput(
+            "charGrpOverview",
+            height = "560px"
+          )
+        )
       )
     )
 

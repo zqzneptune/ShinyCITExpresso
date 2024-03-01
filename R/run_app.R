@@ -215,6 +215,54 @@ run_app <- function(mae, appTitle = "Demo Data") {
 
     })
 
+    # tab 1: Group vs Characteristics ####
+    updateSelectizeInput(
+      session,
+      "groupCharGrpOverview",
+      selected =
+        grpCol[1],
+      choices =
+        grpCol
+    )
+
+    updateSelectizeInput(
+      session,
+      "scoreCharGrpOverview",
+      selected =
+        charCol[1],
+      choices =
+        charCol
+    )
+
+
+    output$charGrpOverview <- renderPlot({
+      req(
+        input$groupCharGrpOverview,
+        input$scoreCharGrpOverview
+      )
+      tblRaw <-
+        data.frame(
+          `group` =
+            listColData[[input$groupCharGrpOverview]],
+          `chara` =
+            listColData[[input$scoreCharGrpOverview]]
+        )
+
+      qBase <-
+        pltCharGrpOverview(
+          tblRaw = tblRaw,
+          grpName = input$groupCharGrpOverview,
+          charName = input$scoreCharGrpOverview,
+          fnCol = "Spectral"
+        )
+      if(input$pltTypeCharGrpOverview == "box"){
+        plot(qBase + geom_boxplot(outlier.shape = NA))
+      }
+      if(input$pltTypeCharGrpOverview == "violin"){
+        plot(qBase + geom_violin())
+      }
+    })
+
     # tab 2: choose feature ####
     updateSelectizeInput(
       session,
