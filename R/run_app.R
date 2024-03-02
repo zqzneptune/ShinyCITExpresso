@@ -64,6 +64,9 @@ run_app <- function(mae, appTitle = "Demo Data") {
         ### tab 4 ####
         getUItabl4(),
 
+        ### tab 5 ####
+        getUItabl5(),
+
         nav_spacer(),
 
         nav_item(
@@ -735,6 +738,77 @@ run_app <- function(mae, appTitle = "Demo Data") {
 
     output$reduGatePseudoSort <- renderPlot({
       getReduGatePseudoSort()
+    })
+
+    # tab 5: Multi Markers ####
+    updateSelectizeInput(
+      session,
+      "groupMultiMk",
+      selected =
+        grpCol[1],
+      choices =
+        grpCol
+    )
+
+    updateSelectizeInput(
+      session,
+      "layerMultiMk",
+      selected =
+        lnAssay[1],
+      choices =
+        lnAssay
+    )
+    observeEvent(input$layerMultiMk,{
+      if(!is.null(input$mkMultiMk)){
+        updateSelectizeInput(
+          session,
+          "mkMultiMk",
+          choices =
+            NULL
+        )
+      }
+      updateSelectizeInput(
+        session,
+        "mkMultiMk",
+        choices =
+          listAssayMarkers[[input$layerMultiMk]],
+        selected =
+          ""
+      )
+    })
+
+    getGrpMultiMkplt <-
+      eventReactive(input$plotGrpMultiMk, {
+        req(input$mkMultiMk)
+        validate(
+          need(length(input$mkMultiMk) > 1, "Please select two or more features")
+        )
+        mkRaw <-
+          do.call(
+            cbind,
+            lapply(input$mkMultiMk, function(mk){
+              return(getFeatureExpression(
+                mae = mae,
+                layer = input$layerMultiMk,
+                feature = mk
+              ))
+            })
+          )
+        colnames(mkRaw) <-
+          input$mkMultiMk
+        tblRaw <-
+          data.frame(
+            `groups` = listColData[[input$groupMultiMk]],
+            mkRaw
+          )
+
+        pltGrpMultiMk(rawData = tblRaw)
+
+      })
+
+
+    output$grpMultiMk <- renderPlot({
+      getGrpMultiMkplt()
     })
 
 
