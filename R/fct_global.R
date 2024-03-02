@@ -7,7 +7,8 @@ getReduDimTheme <- function(pltType = "grp"){
     theme(
       text = element_text(size = 18, family = "Helvetica"),
       panel.background = element_rect(fill = "white", colour = NA),
-      axis.line = element_line(colour = "black"),
+      panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+      axis.line = element_blank(),# element_line(colour = "black"),
       axis.ticks = element_line(colour = "black"),
       axis.text = element_text(size = 18),
       plot.title = element_text(hjust = 0, face = "bold"),
@@ -29,7 +30,7 @@ getReduDimTheme <- function(pltType = "grp"){
             legend.key =
               element_rect(colour = NA, fill = NA))
   }
-  
+
   return(themeBase)
 }
 
@@ -39,7 +40,8 @@ getGrpTheme <- function(){
       theme(
         text = element_text(size = 18, family = "Helvetica"),
         panel.background = element_rect(fill = "white", colour = NA),
-        axis.line = element_line(colour = "black"),
+        panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+        axis.line = element_blank(),# element_line(colour = "black"),
         axis.text = element_text(size = 18),
         plot.title = element_text(hjust = 0, face = "bold"),
         axis.text.x = element_text(angle = 90, hjust = 1),
@@ -47,7 +49,7 @@ getGrpTheme <- function(){
         axis.ticks.x = element_blank(),
         axis.ticks.y = element_blank())
   )
-  
+
 }
 
 # Return global color scheme
@@ -65,7 +67,7 @@ getColorScheme <- function(){
            c("#FDE725", "#AADC32", "#5DC863", "#27AD81", "#21908C",
              "#2C728E", "#3B528B", "#472D7B", "#440154")),
       function(x){return(colorRampPalette(x)(20))})
-  
+
   names(colorPalette) <-
     c("Jet", "Emberstone", "Sunset", "Verdant")
   return(colorPalette)
@@ -82,28 +84,30 @@ getMAEmsg <- function(mae){
     if ("MultiAssayExperiment" %in% class(mae)) {
       listExp <-
         mae@ExperimentList
-      
+
       listSCE <-
         listExp[unlist(lapply(listExp, function(exp){
           return("SingleCellExperiment" %in% class(exp))
         }))]
-      
+
       numSCE <-
         length(listSCE)
-      
+
       if(numSCE > 0){
         numCells <-
           unique(unlist(lapply(listSCE, ncol)))
         if(length(numCells) == 1){
           numVars <-
             unlist(lapply(listSCE, nrow))
-          
+
           msgSummary <-
             paste0(
               sum(numVars), " variables found across ", numSCE, " modalities ",
               "(", paste(
                 paste0(names(numVars), ": ", numVars), collapse = ", "),
-              ")"
+              ") in ",
+              nrow(colData(mae)),
+              " cells"
             )
           return(msgSummary)
         }else{
@@ -140,13 +144,13 @@ getNameColData <- function(listColData){
     list()
   clsColData <-
     unlist(lapply(listColData, class))
-  
+
   listNames[["Group"]] <-
     names(clsColData)[clsColData %in% c("factor", "character")]
-  
+
   listNames[["Charac"]] <-
     names(clsColData)[clsColData %in% c("integer", "numeric")]
-  
+
   listNames[["Traj"]] <-
     names(clsColData)[grepl("pseudotime", names(clsColData))]
   return(listNames)
@@ -158,7 +162,7 @@ getListReducedDim <- function(mae){
     Reduce(append, lapply(experiments(mae), function(sce){
       return(reducedDims(sce))
     }))
-  
+
   listReducedDim <-
     listReducedDim[!duplicated(names(listReducedDim))]
   return(listReducedDim)
@@ -167,7 +171,7 @@ getListReducedDim <- function(mae){
 getPrfReducedName <- function(avaReducedName){
   prfReducedName <-
     avaReducedName[grepl("(umap|pca|tsne|t-sne|fa|fr)", avaReducedName, ignore.case = TRUE)]
-  
+
   if(length(prfReducedName) == 0){
     prfReducedName <-
       avaReducedName[1]
@@ -181,7 +185,7 @@ getListAssayMarkers <- function(mae){
     lapply(experiments(mae), function(sce){
       return(rownames(SummarizedExperiment::assay(sce)))
     })
-  
+
 }
 
 getFeatureExpression <- function(mae, layer, feature){
