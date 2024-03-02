@@ -46,8 +46,7 @@ getGrpTheme <- function(){
         plot.title = element_text(hjust = 0, face = "bold"),
         axis.text.x = element_text(angle = 90, hjust = 1),
         legend.position = "none",
-        axis.ticks.x = element_blank(),
-        axis.ticks.y = element_blank())
+        axis.ticks = element_line(colour = "black"))
   )
 
 }
