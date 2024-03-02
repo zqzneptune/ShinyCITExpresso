@@ -43,7 +43,7 @@ pltOverallCrossModal <- function(tblDat, xLab, yLab, fnCol, corLm){
   }
 
 }
-
+# Suggested by: https://stackoverflow.com/questions/7705345/how-can-i-extract-plot-axes-ranges-for-a-ggplot2-object
 #' @importFrom plyr ddply
 #' @importFrom dplyr summarise
 #' @importFrom stats cor
@@ -71,7 +71,7 @@ pltWrapCrossModal <- function(tblDat, xLab, yLab, fnCol, corLm){
             element_text(size = 24),
           axis.title =
             element_blank())
-  qXrange <- #https://stackoverflow.com/questions/7705345/how-can-i-extract-plot-axes-ranges-for-a-ggplot2-object
+  qXrange <-
     ggplot_build(qBase)$layout$panel_params[[1]]$x.range
   qYrange <-
     ggplot_build(qBase)$layout$panel_params[[1]]$y.range
@@ -84,7 +84,7 @@ pltWrapCrossModal <- function(tblDat, xLab, yLab, fnCol, corLm){
     geom_text(
       data = corsVal,
       aes(
-        label = paste("r=", .data[["cor"]])),
+        label = paste0("r = ", .data[["cor"]])),
       x = corsX,
       y = corsY
     )
