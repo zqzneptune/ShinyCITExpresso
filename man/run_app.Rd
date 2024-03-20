@@ -2,15 +2,19 @@
 % Please edit documentation in R/run_app.R
 \name{run_app}
 \alias{run_app}
-\title{Run the ShinyApp}
+\title{Run the ShinyCITExpresso}
 \usage{
-run_app(mae)
+run_app(mae, appTitle = "Demo Data")
 }
 \arguments{
-\item{mae}{A MultiAssayExperiment object (for documentation purposes only).}
+\item{mae}{A MultiAssayExperiment object with experimentlist of
+SingleCellExperiment objects.}
+
+\item{appTitle}{A character vector to show on as the title of the app.}
 }
 \description{
-Launches a Shiny application using the provided MultiAssayExperiment maeect.
+Launches a Shiny application using the provided
+MultiAssayExperiment object.
 }
 \examples{
 \dontrun{
