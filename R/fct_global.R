@@ -72,7 +72,7 @@ getColorScheme <- function(){
   return(colorPalette)
 }
 
-#' @import MultiAssayExperiment
+#' @importFrom MultiAssayExperiment experiments
 #' @importFrom SingleCellExperiment colData
 #' @importFrom SingleCellExperiment reducedDims
 #' @importFrom SummarizedExperiment assay

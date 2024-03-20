@@ -8,7 +8,13 @@
 #' @import bslib
 #' @import bsicons
 #' @import waiter
-
+#' @importFrom shinyjs useShinyjs
+#' @importFrom shinyjs inlineCSS
+#' @importFrom shinyjs hidden
+#' @importFrom shinyjs show
+#' @importFrom shinyjs hide
+#' @importFrom shinyjs extendShinyjs
+#' @importFrom shinyjs js
 #' @export
 #' @examples
 #' \dontrun{
@@ -19,6 +25,16 @@ run_app <- function(mae, appTitle = "Demo Data") {
   msgMAE <-
     getMAEmsg(mae)
 
+  appCSS <- "
+#loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 20px;
+  color: #333;
+}
+"
   ShinyCITExpresso_ui <-
     fixedPage(
       ## UI settings ####
@@ -35,56 +51,63 @@ run_app <- function(mae, appTitle = "Demo Data") {
         code_font = font_google("Lora")
       ),
 
-      tags$head(
-        tags$style(
-          ".card {
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            transition: 0.3s;
-          }
+      getTagHead(),
 
-          .card:hover {
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-          }"
+      useShinyjs(),
+
+      inlineCSS(appCSS),
+      # Loading message
+      div(
+        id = "loading-content",
+        img(
+          src =
+            file.path("www", "loading-bar.gif"),
+          align = "center"
         )
       ),
 
-      page_navbar(
-        title = "ShinyCITExpresso",
-        header = div(h1(appTitle), p(msgMAE)),
+      # The main app code goes here
+      hidden(
+        div(
+          id = "app-content",
+          page_navbar(
+            title = "ShinyCITExpresso",
+            header = div(h1(appTitle), p(msgMAE)),
 
-        ### tab 1 ####
-        getUItabl1(),
+            ### tab 1 ####
+            getUItabl1(),
 
-        ### tab 2 ####
-        getUItabl2(),
+            ### tab 2 ####
+            getUItabl2(),
 
-        ### tab 3 ####
-        getUItabl3(),
+            ### tab 3 ####
+            getUItabl3(),
 
-        ### tab 4 ####
-        getUItabl4(),
+            ### tab 4 ####
+            getUItabl4(),
 
-        ### tab 5 ####
-        getUItabl5(),
+            ### tab 5 ####
+            getUItabl5(),
 
-        nav_spacer(),
+            nav_spacer(),
 
-        nav_item(
-          tags$a(
-            shiny::icon("github"),
-            href = "https://github.com/zqzneptune/ShinyCITExpresso",
-            target = "_blank"
-          )
-        ),
-        nav_item(
-          tags$a(
-            shiny::icon("house"),
-            href = "https://www.citexpresso.net/shinydemo",
-            target = "_blank"
+            nav_item(
+              tags$a(
+                shiny::icon("github"),
+                href = "https://github.com/zqzneptune/ShinyCITExpresso",
+                target = "_blank"
+              )
+            ),
+            nav_item(
+              tags$a(
+                shiny::icon("house"),
+                href = "https://www.citexpresso.net/shiny/DemoShinyCITExpresso",
+                target = "_blank"
+              )
+            )
           )
         )
       )
-
 
     )
 
@@ -811,6 +834,9 @@ run_app <- function(mae, appTitle = "Demo Data") {
       getGrpMultiMkplt()
     })
 
+    # Hide the loading message when the rest of the server function has executed
+    shinyjs::hide(id = "loading-content", anim = TRUE, animType = "fade")
+    shinyjs::show("app-content")
 
   }
 
